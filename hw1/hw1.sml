@@ -41,8 +41,9 @@ end = struct
     val gcd = commondivisor(num,denom)
     val newnum = num div gcd
     val newdenom = denom div gcd
+    val remainder = num mod denom
   in
-    if (num = denom) then
+    if (remainder = 0) then
       (1,1)
     else
       (newnum, newdenom)
@@ -50,17 +51,13 @@ end = struct
 
 
   fun midpoint(Point(x,y), Point(w, z)) =
-    ((x+w)/2.0, (y+z)/2.0)
+    Point((x+w)/2.0, (y+z)/2.0)
 
 
   fun perimeter(shape) =
       (case shape
         of Circle(Point(x,y), radius) =>
-          let
-            val perimeter = 2.0*Math.pi*radius
-          in
-            perimeter
-          end
+            2.0*Math.pi*radius
         | Triangle(Point(a,b), Point(c,d), Point(e,f)) =>
           let
             val length1 = Math.sqrt((c-a)*(c-a) + (d-b)*(d-b))
@@ -80,6 +77,8 @@ end = struct
         tail)
 
   fun meanColor(nil) = raise Fail "empty list in meanColor"
+    | meanColor({r = x, g = y, b = z}::nil) =
+      {r = x, g = y, b = z}
     | meanColor(list) =
       let
         val {r = x, g = y, b = z} = sumColor(list)
@@ -98,23 +97,23 @@ end = struct
           findmin(head2::tail)
 
   fun remove(x, []) = raise Fail "empty list in remove"
-    | remove(x, [n]) =
+    | remove(x, n::nil) =
       if x = n then
-        []
-      else [n]
+        nil
+      else n::nil
     | remove(x, head::tail) =
       if x = head then
-        remove(x,tail)
+        tail
       else
         head::remove(x, tail)
 
-  fun selectionSort([]) = []
-   | selectionSort([head]) = [head]
-   | selectionSort(head1 :: head2 :: tail) =
+  fun selectionSort(nil) = nil
+   | selectionSort(head :: nil) = [head]
+   | selectionSort(head::tail) =
       let
-        val min = findmin(head1::head2::tail)
+        val min = findmin(head::tail)
       in
-        selectionSort([min] @ remove(min, (head1::head2::tail)))
+        min:: selectionSort(remove(min,head::tail))
       end
 
 
