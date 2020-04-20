@@ -1,0 +1,10 @@
+Group
+  structure Functions
+  structure Check
+  structure Tests
+is
+  $/basis.cm
+  $/smlnj-lib.cm
+  functions.sml
+  check.sml
+  tests.sml
