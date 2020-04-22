@@ -1,0 +1,35 @@
+CMSC 22100 Spring 2020: Homework 1
+
+This graded file is for the student with the following cnet: lucyyutingli
+
+===== correctness:
+
+reduce         7 / 8
+
+midpoint       8 / 8
+
+perimeter      8 / 8
+
+meanColor      8 / 8
+
+selectionSort  8 / 8
+
+===== style:
+
+layout              (* no layout points this week -- we know you're new at this *)
+
+clarity        5 / 5  (* i.e., the code can be read by another programmer without extraordinary effort *)
+
+decomposition  4 / 5  (* the code is well organized, helper functions defined where helpful *)
+
+===== total: 48 / 50
+
+Comments:
+- In reduce it is unnecessary (and incorrect) to check the
+  remainder. For example, consider the fraction 20/10. 20 mod 10 is 0
+  but you would reduce such a fraction to 2 / 1 not 1 / 1. If you just
+  always return (newnum, newdenom) it should work as expected
+
+- For better orginazation, it would be a good idea to write a distance function to   use in perimeter.
+
+graded by Daisy Barbanel
