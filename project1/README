@@ -1,0 +1,67 @@
+CS221 Spring 2020: Project 1
+
+This directory contains 8 files, including this README.
+
+nb.sml
+
+  This file includes definitions of the NB language as defined in
+  figures 3-1 and 3-2 in the text.
+
+  The functions isValue and isNumericValue are defined implicitly in
+  figures 3-1 and 3-2.
+
+  The function tos should turn a term into a Scheme/Racket like
+  syntactic term. Here are examples of each kind of NB term and the
+  string you should construct for each one:
+
+    True --> "#t"
+    False --> "#f"
+    If (True, Zero, Succ Zero)) --> "(if #t 0 (succ 0))"
+    Zero --> "0"
+    Succ (Succ Zero) --> "(succ (succ 0))"
+    Pred Zero --> "(pred 0)"
+    IsZero (Succ Zero) --> "(iszero (succ 0))"
+
+term-set.sml
+
+  Basic set operations. Implement however you like, but beware
+  inefficiency. See item27/opacity.
+
+eval.sml
+
+  The function step should take one step of evaluation if it can,
+  according to the systems defined in figures 3-1 and 3-2. Do not go
+  rogue and implement your own evaluation system; follow the
+  figures. See item22.
+
+  The function steps should keep stepping until no more stepping can
+  be done, and should collect in a list all of the terms stepped to
+  along the way. See item25.
+
+  The function eval should step until reaching a normal form. See
+  item26.
+
+analysis.sml
+
+  The function size should implement the definition of size given in
+  definition 3.3.2.
+
+  The function indexedSet should implement the definition of S_0,
+  etc. given in definition 3.2.3.
+
+check.sml
+
+  See item24/check.
+
+tests.sml
+
+  Write tests in the file as you see fit.
+
+sources.cm manages compilation. In the REPL, run
+
+  - CM.make "sources.cm";
+
+Please push your finished work by Monday, April 27 11:59pm CDT. Your
+mileage may vary, but your teacher thinks this kind of terse, elegant
+recursive programming is lively, mind-stimulating and beautiful. Happy
+hacking!
