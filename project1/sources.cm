@@ -1,0 +1,17 @@
+Group
+  structure NB
+  structure Eval
+  structure TermSet
+  structure Analysis
+  structure Check
+  structure Tests
+is
+  $/basis.cm
+  $/smlnj-lib.cm
+  nb.sml
+  eval.sml
+  term-set.sml
+  analysis.sml
+  check.sml
+  tests.sml
+  
