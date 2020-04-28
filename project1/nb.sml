@@ -13,7 +13,7 @@ structure NB : sig
   val isValue : term -> bool
 
   val tos : term -> string
-		  		  
+
 end = struct
 
   datatype term
@@ -25,10 +25,23 @@ end = struct
     | Pred of term
     | IsZero of term
 
-  fun isNumericValue _ = raise Fail "todo: NB.isNumericValue"
-		  
-  fun isValue _ = raise Fail "todo: NB.isValue"
-			
-  fun tos _ = raise Fail "NB.tos"
-					      
+
+  fun isNumericValue Zero = true
+    | isNumericValue (Succ x) = isNumericValue(x)
+    | isNumericValue _ = false
+
+
+  fun isValue True = true
+    | isValue False = true
+    | isValue x = isNumericValue x
+
+
+  fun tos True = "#t"
+  | tos False = "#f"
+  | tos Zero = "0"
+  | tos (IsZero x) = "(iszero "^tos x^")"
+  | tos (Succ x) = "(succ "^tos x^")"
+  | tos (Pred x) = "(pred "^tos x^")"
+  | tos (If (x, y, z)) = "(if "^tos x^" " ^tos y^ " "^tos z^")"
+
 end
