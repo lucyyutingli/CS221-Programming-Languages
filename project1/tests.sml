@@ -27,7 +27,20 @@ structure Tests = struct
   val _ = Check.expect(NB.tos (NB.If (NB.True, NB.Zero, NB.Succ NB.Zero)),"(if #t 0 (succ 0))",
     "tos If complex test")
 
-
+    val indexedSetTest2 = TermSet.toList (Analysis.indexedSet 2)
+      val _ = Check.expect(TermSet.toList (Analysis.indexedSet 1),
+                           [NB.True, NB.False, NB.Zero], "indexedSet failed 0")
+      val  _= Check.among(NB.If (NB.True, NB.False, NB.Zero),
+                          indexedSetTest2, "indexedSet failed 1")
+      val  _= Check.among(NB.If (NB.Zero, NB.Zero, NB.Zero),
+                          indexedSetTest2, "indexedSet failed 2")
+      val  _= Check.among(NB.IsZero (NB.True),
+                            indexedSetTest2, "indexedSet failed 3")
+    (* NOTE: THESE TESTS DO PASS, but it takes forever since my code is inefficient)
+      ( val indexedSetTest3 = TermSet.toList (Analysis.indexedSet 3) )
+      ( val  = Check.among(NB.If (NB.True, NB.False, NB.If (NB.True, NB.False, NB.Zero)),
+                          indexedSetTest3, "indexedSet failed 3") )
+      ( val  = Check.expect(TermSet.size (indexedSetTest3), 59439, "size failed 0") *)
 
 
 

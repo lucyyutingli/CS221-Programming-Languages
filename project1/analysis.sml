@@ -42,6 +42,7 @@ end  = struct
   fun indexedSet 0 = TermSet.empty
     | indexedSet 1 = TermSet.insert(NB.Zero, (TermSet.insert
       (NB.True, TermSet.singleton(NB.False))))
+    | indexedSet 2 = permutation([NB.True, NB.False, NB.Zero],[NB.True, NB.False, NB.Zero],[NB.True, NB.False, NB.Zero],[NB.True, NB.False, NB.Zero])
     | indexedSet n =
       let
         val prev = indexedSet(n-1)
