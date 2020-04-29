@@ -1,0 +1,25 @@
+Group
+  structure Token
+  structure Scan
+  structure AST
+  structure Parse
+  structure InternalAST
+  structure Desugar
+  structure Eval
+  structure Compile
+  structure Check
+  structure Tests
+is
+  $/basis.cm
+  $/smlnj-lib.cm
+  token.sml
+  scan.sml
+  ast.sml
+  parse.sml
+  internal-ast.sml
+  desugar.sml
+  eval.sml
+  compile.sml
+  check.sml
+  tests.sml
+  

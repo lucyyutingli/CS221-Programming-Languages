@@ -1,0 +1,84 @@
+CS221 Spring 2020: Project 2
+
+A good way to get a quick overview of what the requirements of this
+project are is to run the following command in the terminal:
+
+$ grep todo *.sml
+
+This will report all the occurrences of the word "todo" in all the
+source files.
+
+This project is to implement a simple compiler for the Finagle
+language, as described in the PDFs attached to item30 and
+item31. Please refer to those two items for many details about this
+project.
+
+============
+
+This directory contains 12 files, including this README.
+
+Files marked (C) (for complete) do not need to be edited. Files marked
+(T) (for todo) are incomplete and leave something for you to do.
+
+(C) token.sml
+
+  The Token module enumerates all the lexical tokens in the Finagle
+  language.
+
+(T) scan.sml
+
+  The Scan module manages lexical scanning, i.e., chopping source code
+  into lexical tokens. Scanning, along with parsing, turns concrete
+  syntax (sequences of characters) into abstract syntax (trees).
+
+(T) ast.sml
+
+  This is the abstract syntax representation of the Finagle language
+  (see item30 for both concrete and abstract syntax).
+
+(T) parse.sml
+
+  The Parse module arranges sequences of tokens into ASTs. The kind of
+  parsing done here is known as "recursive descent."
+
+(T) internal-ast.sml
+
+  Finagle programs are translated into Core Finagle programs. Core
+  Finagle is a simpler language with fewer syntactic forms than full
+  Finagle. The more streamlined language is easier to evaluate because
+  it has fewer forms.
+
+(T) desugar.sml
+
+  The Desugar module translates Finagle into Core Finagle, according
+  to the rules given in item31.
+
+(T) eval.sml
+
+  The Eval module evaluates programs according to the small-step
+  evaluation semantics as described in item30.
+
+(C) compile.sml
+
+  The Compile module chains together compilation phases.
+
+(C) check.sml
+
+  See item24/check.
+
+(*) tests.sml
+
+  Write tests in the file as you see fit.
+
+  * How much or how little you write in this file is up to you.
+
+(C) project2.cm manages compilation. In the REPL, run
+
+  - CM.make "project2.cm";
+
+Please push your finished work by Tuesday, May 5, 11:59pm CDT.
+
+Writing compilers in Standard ML is a rarefied pleasure only a few of
+us get to experience. We happy few!
+
+Happy hacking!
