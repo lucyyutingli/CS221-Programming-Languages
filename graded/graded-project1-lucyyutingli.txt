@@ -1,0 +1,74 @@
+CMSC 22100 Spring 2020: Project 1
+
+This graded file is for the student with the following cnet: lucyyutingli
+
+===== correctness:
+
+NB.isVal             5 / 5
+NB.isNumericVal      5 / 5
+NB.tos               5 / 5
+
+TermSet.singleton    3 / 3
+TermSet.size         3 / 3
+
+TermSet.insert       1 / 3
+TermSet.union        3 / 3
+TermSet.toList       3 / 3
+
+Eval.step            4 / 8
+Eval.steps           8 / 8
+Eval.eval            8 / 8
+
+Analysis.size         8 / 8
+Analysis.indexedSet   7 / 8
+
+===== style:
+
+layout              (* no layout points, but write beautiful code anyway *)
+
+clarity        5 / 5  (* i.e., the code can be read by another programmer without extraordinary effort *)
+
+decomposition  5 / 5  (* the code is well organized, helper functions defined where helpful *)
+
+===== total: 73 / 80
+
+Comments:
+
+- TermSet:
+  - Sets are not supposed to contain duplicates. That means in your
+    insert and any other function that modifies the contents
+    of the set, you have to make sure that no duplicates are being
+    added.
+
+- Eval.step:
+  - Don't raise fail when the step function evaluates to NONE. If
+    (step t) evaluates to NONE, this means that no more evaluation
+    steps can be taken i.e. t is either a value or stuck. In this
+    case, the recursive call should also return NONE to indicate that
+    evaluation is complete. This is important to understand for future
+    projects, so ask on piazza if you're still confused.
+  
+  - The if cases below here are flipped from what they should be:
+    | step (NB.Succ x) =
+        if (NB.isNumericValue x) = true then              
+          (case step x
+              of SOME x' => SOME (NB.Succ x')
+              |  NONE => raise Fail "NB.Succ something is wrong")
+        else
+          NONE                                          
+    (Succ nv) is a normal form so if NB.isNumericValue x is true then NONE should be returned.
+
+  - For the case NB.Pred (NB.Succ x), x must be a *numeric value* in
+    order to advance. An numeric value is either Zero or (Succ nv) just
+    checking that x is Zero is not enough
+  - Same thing for NB.IsZero (NB.Succ x) -- you have to check that x is a numeric value
+
+- Analysis.indexedSet
+  - indexedSet 2 is incorrect. It should include all possible succ,
+    pred, iszero, and if terms (you should be returning a result with
+    39 total terms). You also don't need an explicit case for
+    indexedSet 2, it should just use the same recursive case as
+    indexedSet i to make sure you capture all possible permutations.
+    (In fact, if you remove that case your function works perfectly)
+
+graded by dbarbanel
