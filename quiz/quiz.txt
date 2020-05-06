@@ -1,0 +1,52 @@
+Quiz - Lucy Li
+
+1)
+
+  datatype terms
+  = True
+  | False
+  | Maybe
+  | Not of term
+  | Plus of term * term
+  | Question of term * term * term
+
+2)
+
+  xor #t #f -> #t
+  xor #f #t -> #t
+  xor #f #f -> #f
+  xor #t #t -> #f
+
+
+        t1 -> t1'
+  ----------------------
+  xor t1 t2 -> xor t1' t2
+
+
+        t2 -> t2'
+  ----------------------
+  xor v t2 -> xor v t2'
+
+
+  3)
+
+  fun balancedhelper ([], counter) =
+        counter
+    | balancedhelper (h :: tail, counter) =
+        if h = #"("
+          balancedhelper (tail, counter + 1)
+        else if h = #")"
+          then
+            balancedhelper(tail, counter - 1)
+        else
+          balancedhelper(tail, counter)
+
+
+  fun balanced (string) =
+        let
+          val newlist = String.explode(string)
+          val count = balancedhelper(newlist, 0)
+        in
+          if count = 0
+            true
+          else
