@@ -1,0 +1,29 @@
+CS221 Spring 2020: Project 3
+
+This directory contains 15 files, including this README.
+
+In project 3, we build Finagle's successor, which is named Bamboozle.
+
+Bamboozle extends Finagle with unit, pairs, and local
+variables. Notably, Bamboozle includes a typechecking phase in order
+to preemptively eliminate the possibility of reaching a stuck state
+during evaluation.
+
+As before, running "grep todo *.sml" will give you a quick overview of
+your tasks for this project. Here is a summary:
+
+scan.sml: enable the scanner to scan variable names. A variable name
+always starts with a . and consists of one or more letters, numbers,
+and underscores after that. The upcoming item on variables will
+address variable name conventions.
+
+desugar.sml: desugar the Xor form
+
+eval.sml: implement step for Pair, Select1, Select2, and Scope
+
+subst.sml: implement subst.
+
+typecheck.sml: implement typeof and lookup for type environments.
+
+Project 3 is due on Wed May 20 by 11:59pm. Have fun!
+
