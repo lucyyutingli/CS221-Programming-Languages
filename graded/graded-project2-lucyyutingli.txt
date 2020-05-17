@@ -1,0 +1,51 @@
+CMSC 22100 Spring 2020: Project 2
+
+This graded file is for the student with the following cnet: lucyyutingli
+
+===== correctness:
+
+scans fixed tokens   7 / 8 
+scans nat constants  8 / 8 
+
+parses constants                      4 / 4 
+parses unary ops (not, pred, isz)     6 / 6 
+parses binary ops (and, or, =, >, +)  4 / 6 
+parses if                             4 / 4 
+
+desugars nats         6 / 6 
+desugars logical ops  6 / 6 
+desugars isz          4 / 4 
+
+eval.step    4 / 10
+eval.steps   4 /  4
+eval.eval    4 /  4
+
+===== style:
+
+layout              (* no layout points, but write beautiful code anyway *)
+
+clarity        5 / 5  (* i.e., the code can be read by another programmer without extraordinary effort *)
+
+decomposition  5 / 5  (* the code is well organized, helper functions defined where helpful *)
+
+===== total: 71 / 80
+
+Comments:
+Nice work :)
+
+scan.sml
+- You need to raise an error if you scan an invalid token
+
+parse.sml
+- In your equals, greater than, and plus cases, you return A.Or instead of the
+    appropriate operation
+
+eval.sml
+- Your plus cases are not handled correctly. For Plus (Succ x, y) you need to
+    check if y is a numval and if so add one to y and subtract one from Succ x. 
+    For Plus(x,y), if you cannot step you should return NONE.
+- For the Eq and GT cases, when Succ x is involved, you need to make sure that
+    x is a numVal rather that stepping on it.
+
+graded by zene
+
