@@ -22,7 +22,7 @@ structure AST : sig
     | Xor of term * term
 
   val tos : term -> string
-  
+
 end = struct
 
   datatype term
@@ -45,10 +45,10 @@ end = struct
     | Scope of string * term * term
     | Variable of string
     | Xor of term * term
-			
+
   infix spc
   fun t1 spc t2 = t1 ^ " " ^ t2
-		       
+
   fun tos True = "#t"
     | tos False = "#f"
     | tos (If (t1, t2, t3)) = "(if" spc (tos t1) spc (tos t2) spc (tos t3) ^ ")"
@@ -68,5 +68,5 @@ end = struct
     | tos (Scope (v, t1, t2)) = ("{" ^ v) spc (tos t1) spc (tos t2) ^ "}"
     | tos (Variable v) = v
     | tos (Xor (t1, t2)) = "(xor" spc (tos t1) spc (tos t2) ^ ")"
-						  
+
 end

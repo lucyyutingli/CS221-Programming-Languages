@@ -1,7 +1,7 @@
 structure Scan : sig
 
   val scan : string -> Token.token list
-	    
+
 end = struct
 
   structure T = Token
@@ -17,6 +17,7 @@ end = struct
       lp xs
     end
 
+
 (* nextInt : char list -> T.token * char list *)
 (* pack leading digits into a nat, return that and the rest *)
 (* pre: only call if first char is a digit *)
@@ -24,8 +25,21 @@ end = struct
    (case takeWhile Char.isDigit chars
       of (digits, cs) =>
         (case Int.fromString (implode digits)
-	   of SOME n => (T.NatConst n, cs)
-	    | NONE => raise Fail "nextInt bug" (* shouldn't be possible *)))
+      	   of SOME n => (T.NatConst n, cs)
+      	    | NONE => raise Fail "nextInt bug" (* shouldn't be possible *)))
+
+
+  fun isValid char =
+    if (char = #"_") orelse (Char.isAlphaNum char) then
+      true
+    else
+      raise Fail "invalid char in variable name"
+
+  fun nextChar chars =
+    (case (takeWhile isValid chars)
+        of (chars, cs) =>
+          (T.Variable ("." ^(implode chars)), cs))
+
 
   fun nextToken chars =
     let
@@ -53,11 +67,15 @@ end = struct
 	| lp (#"p" :: #"a" :: #"i" :: #"r" :: cs) = SOME (T.Pair, cs)
 	| lp (#"#" :: #"1" :: cs) = SOME (T.Hash1, cs)
 	| lp (#"#" :: #"2" :: cs) = SOME (T.Hash2, cs)
-	| lp (#"." :: cs) = raise Fail "todo: scan variable names"
+	| lp (#"." :: cs) =
+      (case cs
+        of nil => raise Fail "no variable name"
+         | c::cs =>
+            SOME (nextChar (c::cs)))
 	| lp (c::cs) =
 	    if Char.isDigit c
 	    then SOME (nextInt (c::cs))
-	    else raise Fail ("scan error: " ^ implode cs)		
+	    else raise Fail ("scan error: " ^ implode cs)
     in
       lp chars
     end

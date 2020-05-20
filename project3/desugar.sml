@@ -13,7 +13,7 @@ end = struct
     else if (n=0)
          then I.Zero
          else I.Succ (succ (n-1))
-		  
+
   fun desugar t =
     let
       fun lp A.True = I.True
@@ -34,9 +34,10 @@ end = struct
 	| lp (A.Select2 t1) = I.Select2 (lp t1)
 	| lp (A.Scope (x, t1, t2)) = I.Scope (x, lp t1, lp t2)
 	| lp (A.Variable v) = I.Variable v
-	| lp (A.Xor (t1, t2)) = raise Fail "todo: desugar xor"
+	| lp (A.Xor (t1, t2)) = I.If (I.And (lp t1, lp t2), I.False,
+      I.If(I.Or (lp t1, lp t2), I.True, I.False))
     in
       lp t
     end
-		  
+
 end

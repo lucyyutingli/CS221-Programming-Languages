@@ -14,7 +14,7 @@ end = struct
 
   fun unsucc (I.Succ t) = t
     | unsucc _ = raise Fail "unsucc: deep compiler bug"
-		  
+
   fun step I.True = NONE
     | step I.False = NONE
     | step (I.If (I.True, t2, _)) = SOME t2
@@ -78,12 +78,37 @@ end = struct
 	             of SOME t1' => SOME (I.Plus (t1', t2))
 		      | NONE => NONE)
     | step I.Unit = NONE
-    | step (I.Pair (t1, t2)) = raise Fail "todo: step, Pair"
-    | step (I.Select1 t1) = raise Fail "todo: step, Select1"
-    | step (I.Select2 t1) = raise Fail "todo: step, Select2"
-    | step (I.Scope (x, t1, t2)) = raise Fail "todo: step, Scope"
+    | step (I.Pair (t1, t2)) =
+        if I.isValue t1 andalso I.isValue t2 then
+          (case step t1
+              of SOME t1' => SOME (I.Pair (t1', t2))
+               | NONE =>
+                  (case step t2
+                      of SOME t2' => SOME (I.Pair (t1, t2')
+                       | NONE => SOME (I.Pair (t1, t2)))))
+        else raise Fail "pair terms not values"
+    | step (I.Select1 t1) =
+        (case step t1
+            of SOME t1' => SOME (I.Select1 t1')
+             | NONE =>
+                (case t1
+                    of SOME I.Pair (x, y) => SOME x
+                     | NONE => NONE
+    | step (I.Select2 t1) =
+        (case step t1
+            of SOME t1' => SOME (I.Select2 t1')
+             | NONE =>
+                (case t1
+                    of SOME I.Pair (x, y) => SOME y
+                     | NONE => NONE))
+    | step (I.Scope (x, t1, t2)) =
+        (case step t1
+            of SOME t1' => SOME (I.Scope (x, t1', t2))
+             | NONE =>
+                  if I.isValue t1 then
+                    SOME subst (x, t1, t2))
     | step (I.Variable _) = NONE
-		      
+
   fun steps t =
     (case step t
        of NONE => [t]
