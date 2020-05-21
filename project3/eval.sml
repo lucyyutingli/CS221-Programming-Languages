@@ -11,6 +11,7 @@ structure Eval : sig
 end = struct
 
   structure I = InternalAST
+  structure S = Subst
 
   fun unsucc (I.Succ t) = t
     | unsucc _ = raise Fail "unsucc: deep compiler bug"
@@ -79,34 +80,40 @@ end = struct
 		      | NONE => NONE)
     | step I.Unit = NONE
     | step (I.Pair (t1, t2)) =
-        if I.isValue t1 andalso I.isValue t2 then
-          (case step t1
-              of SOME t1' => SOME (I.Pair (t1', t2))
-               | NONE =>
+        (case step t1
+            of SOME t1' => SOME (I.Pair (t1', t2))
+             | NONE =>
+                if I.isValue t1 then
                   (case step t2
-                      of SOME t2' => SOME (I.Pair (t1, t2')
-                       | NONE => SOME (I.Pair (t1, t2)))))
-        else raise Fail "pair terms not values"
+                      of SOME t2' => SOME (I.Pair (t1, t2'))
+                       | NONE =>
+                          if I.isValue t2 then
+                            NONE
+                          else raise Fail "t2 in pair is not a value")
+                else
+                  raise Fail "t1 in pair is not a value")
     | step (I.Select1 t1) =
         (case step t1
             of SOME t1' => SOME (I.Select1 t1')
              | NONE =>
                 (case t1
-                    of SOME I.Pair (x, y) => SOME x
-                     | NONE => NONE
+                    of I.Pair (x, y) => SOME x
+                     | _ => raise Fail "cannot select1 of something not a pair"))
     | step (I.Select2 t1) =
         (case step t1
             of SOME t1' => SOME (I.Select2 t1')
              | NONE =>
                 (case t1
-                    of SOME I.Pair (x, y) => SOME y
-                     | NONE => NONE))
+                    of I.Pair (x, y) => SOME y
+                     | _ => raise Fail "cannot select2 of something not a pair"))
     | step (I.Scope (x, t1, t2)) =
         (case step t1
             of SOME t1' => SOME (I.Scope (x, t1', t2))
              | NONE =>
                   if I.isValue t1 then
-                    SOME subst (x, t1, t2))
+                    SOME (S.subst (x, t1, t2))
+                  else
+                    raise Fail "t1 is not a value")
     | step (I.Variable _) = NONE
 
   fun steps t =

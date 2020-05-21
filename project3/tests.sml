@@ -1,6 +1,7 @@
 structure Tests = struct
 
   structure T = Token
+  structure TT = Type
   structure S = Scan
   structure Sub = Subst
   structure A = AST
@@ -9,6 +10,7 @@ structure Tests = struct
   structure D = Desugar
   structure E = Eval
   structure C = Compile
+  structure Ty = Typecheck
 
   val expect = Check.expect
 
@@ -47,8 +49,8 @@ structure Tests = struct
       val _ = expect (D.desugar (A.And (A.True, A.False)), I.If (I.True, I.False, I.False), "desugar4")
       val _ = expect (D.desugar (A.Or (A.True, A.False)), I.If (I.True, I.True, I.False), "desugar5")
       val _ = expect (D.desugar (A.Isz (A.NatConst 0)), I.Eq (I.Zero, I.Zero), "desugar6")
-      val _ = expect (D.desugar (A.Xor (A.True, A.False)), I.If (I.And (I.True, I.False),
-                I.False, I.If (I.Or (I.True, I.False), I.True, I.False)), "desugar7")
+      val _ = expect (D.desugar (A.Xor (A.True, A.False)), I.If (I.If (I.True, I.False, I.False),
+                I.False, I.If (I.If (I.True, I.True, I.False), I.True, I.False)), "desugar7")
     in
       print "desugar tests done\n"
     end
@@ -57,7 +59,7 @@ structure Tests = struct
     let
       val _ = expect (Sub.subst (".x", I.Zero, I.Variable ".x"), I.Zero, "subst1")
       val _ = expect (Sub.subst (".x", I.Zero, I.True), I.True, "subst2")
-      val _ = expect (Sub.subst (".y", I.True, I.If (I.Variable "x", I.Variable "x", I.False)), I.If (I.True, I.True, I.False), "subst3")
+      val _ = expect (Sub.subst (".x", I.True, I.If (I.Variable ".x", I.Variable ".x", I.False)), I.If (I.True, I.True, I.False), "subst3")
       val _ = expect (Sub.subst (".lol", I.False, I.Pair (I.Variable ".lol", I.True)), I.Pair (I.False, I.True), "subst4")
       val _ = expect (Sub.subst (".x", I.Variable ".y", I.Variable ".x"), I.Variable ".y", "subst5")
     in
@@ -75,14 +77,27 @@ structure Tests = struct
       val _ = expect (E.step (I.Succ I.True), NONE, "step2")
       val _ = expect (E.steps (I.Succ I.True), [I.Succ I.True], "steps2")
       val _ = expect (E.eval (I.Succ I.True), E.Stuck (I.Succ I.True), "eval2")
-      val _ = expect (E.step (I.Pair (I.True, I.False)), I.Pair (I.True, I.False), "step pair")
-      val _ = expect (E.step (I.Select1 (I.Pair (I.True, I.False))), I.True, "step select1")
-      val _ = expect (E.step (I.Pair (I.Succ I.Zero, I.False)), I.Pair (I.NatConst 1, I.False), "step pair const")
-      val _ = expect (E.step (I.Pair (I.False, I.True)), I.True, "step select2")
-      val _ = expect (E.step (I.Scope (".x", I.Zero, I.Plus (I.Variable ".x", I.NatConst 1))), I.Plus (I.Zero, I.NatConst 1), "plus scope")
+      val _ = expect (E.step (I.Pair (I.True, I.False)), NONE, "step pair")
+      val _ = expect (E.step (I.Select1 (I.Pair (I.True, I.False))), SOME I.True, "step select1")
+      val _ = expect (E.step (I.Pair (I.Pred (I.Succ I.Zero), I.False)), SOME (I.Pair (I.Zero, I.False)), "step pair const")
+      val _ = expect (E.step (I.Select2 (I.Pair (I.False, I.True))), SOME I.True, "step select2")
+      val _ = expect (E.step (I.Scope (".x", I.Zero, I.Plus (I.Variable ".x", I.Zero))), SOME (I.Plus (I.Zero, I.Zero)), "isz scope")
+      val _ = expect (E.step (I.Pair (I.False, I.If (I.True, I.True, I.False))), SOME (I.Pair (I.False, I.True)), "pair step1")
+      val _ = expect (E.step (I.Variable ".y"), NONE, "step variable")
     in
       print "eval tests done\n"
     end
+
+  fun typecheck () =
+    let
+      val _ = expect (Ty.typeof (A.Unit), TT.Unit, "typecheck Unit")
+      val _ = expect (Ty.typeof (A.Or (A.True, A.False)), TT.Bool, "typecheck bool of Or")
+      val _ = expect (Ty.typeof (A.Plus (A.NatConst 3, A.NatConst 4)), TT.Nat, "typecheck nat of plus")
+      val _ = expect (Ty.typeof (A.Pair (A.True, A.False)), TT.Product (TT.Bool, TT.Bool), "typecheck bool of pair")
+    in
+      print "typecheck tests done"
+    end
+
 
   fun compile () =
     let
@@ -100,6 +115,7 @@ structure Tests = struct
       val _ = eval ()
       val _ = compile ()
       val _ = subst ()
+      val _ = typecheck ()
     in
       print "tests done\n"
     end
