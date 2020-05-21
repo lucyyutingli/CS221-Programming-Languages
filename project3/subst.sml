@@ -26,7 +26,10 @@ end = struct
     | subst (x, v1, I.Pair (y, z)) = I.Pair (subst(x, v1, y), subst(x, v1, z))
     | subst (x, v1, I.Select1 t1) = I.Select1 (subst(x, v1, t1))
     | subst (x, v1, I.Select2 t1) = I.Select2 (subst (x, v1, t1))
-    | subst (x, v1, I.Scope (name, y, z)) = I.Scope (name, subst (x, v1, y), subst (x, v1, z))
-
+    | subst (x, v1, I.Scope (name, y, z)) =
+        if x = name then
+          I.Scope (name, subst(x, v1, y), z)
+        else
+          I.Scope (name, subst(x, v1, y), subst(x, v1, z))
 
 end

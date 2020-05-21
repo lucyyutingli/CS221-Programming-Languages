@@ -15,12 +15,12 @@ end = struct
   fun extend (g, x, t) = (x,t)::g
 
 (* lookup : typeEnv * string -> ty *)
-  fun lookup (nil, name) = raise Fail "empty list or name var name not found"
+  fun lookup (nil, name) = raise Fail "empty list or var name not found"
     | lookup ((varname, typename)::tail, name) =
         if varname = name then
           typename
         else
-          lookup(tail,name)
+          lookup(tail, name)
 
 (* typeof_helper : typeEnv * term -> ty *)
   fun typeof_helper (g, A.True) = T.Bool
@@ -108,11 +108,11 @@ end = struct
              | _ => raise Fail "not a product t in Select1")
     | typeof_helper (g, A.Scope (s, t1, t2)) =
         let
-          val newg = extend (g, s, t1)
+          val newg = extend (g, s, typeof_helper(g, t1))
         in
           typeof_helper (newg, t2)
         end
-    | typeof_helper (g, A.Variable x) = typeof_helper(g, lookup (g, x))
+    | typeof_helper (g, A.Variable x) = lookup (g, x)
 
 
 (* typeof : term -> ty *)

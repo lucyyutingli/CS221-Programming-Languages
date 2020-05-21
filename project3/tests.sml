@@ -84,6 +84,7 @@ structure Tests = struct
       val _ = expect (E.step (I.Scope (".x", I.Zero, I.Plus (I.Variable ".x", I.Zero))), SOME (I.Plus (I.Zero, I.Zero)), "isz scope")
       val _ = expect (E.step (I.Pair (I.False, I.If (I.True, I.True, I.False))), SOME (I.Pair (I.False, I.True)), "pair step1")
       val _ = expect (E.step (I.Variable ".y"), NONE, "step variable")
+      val _ = expect (E.step (I.Scope (".x", I.True, (I.Scope (".x", I.Zero, I.Variable ".x")))), SOME (I.Scope (".x", I.Zero, I.Variable ".x")), "nested scope")
     in
       print "eval tests done\n"
     end

@@ -113,7 +113,7 @@ end = struct
                   if I.isValue t1 then
                     SOME (S.subst (x, t1, t2))
                   else
-                    raise Fail "t1 is not a value")
+                    NONE)
     | step (I.Variable _) = NONE
 
   fun steps t =
