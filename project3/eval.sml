@@ -98,14 +98,14 @@ end = struct
              | NONE =>
                 (case t1
                     of I.Pair (x, y) => SOME x
-                     | _ => raise Fail "cannot select1 of something not a pair"))
+                     | _ => NONE))
     | step (I.Select2 t1) =
         (case step t1
             of SOME t1' => SOME (I.Select2 t1')
              | NONE =>
                 (case t1
                     of I.Pair (x, y) => SOME y
-                     | _ => raise Fail "cannot select2 of something not a pair"))
+                     | _ => NONE))
     | step (I.Scope (x, t1, t2)) =
         (case step t1
             of SOME t1' => SOME (I.Scope (x, t1', t2))
