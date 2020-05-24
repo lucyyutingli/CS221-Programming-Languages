@@ -1,0 +1,16 @@
+quiz evaluation for lucyyutingli
+
+question 1 itemized: true 1, false 1, maybe 1, ! 2, + 2, ? 2
+question 2 itemized: xor t1 2, xor t2 2, tt 2, tf 2, ft 2, ff 2
+
+question 1 total 9 / 9
+question 2 total 12 / 12
+question 3 total 8 / 10
+
+question 2 comment (Shaw): (none)
+
+question 3 comment (Kavon): "-2: not checking if count goes negative to return early"
+
+Your quiz score is the sum of the above plus one free point.
+
+quiz score 30 / 32
