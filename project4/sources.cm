@@ -1,0 +1,44 @@
+Group
+  structure Read
+  structure SULC
+  structure ULC
+  structure Token
+  structure Scan
+  structure Parse
+  structure Inline
+  structure Desugar
+  structure Fresh
+  structure VarSet
+  structure Subst
+  signature SMALL_STEP
+  structure CBV
+  structure FullBeta
+  structure NormalOrder
+  structure Lazy	
+  structure Eval
+  structure Interpret
+  structure Check
+  (* structure Tests *)
+is
+  $/basis.cm
+  $/smlnj-lib.cm
+  read.sml
+  sulc.sml
+  ulc.sml
+  token.sml
+  scan.sml
+  parse.sml
+  inline.sml
+  desugar.sml
+  fresh.sml
+  var-set.sml
+  subst.sml
+  small-step.sig
+  cbv.sml
+  full-beta.sml
+  normal-order.sml
+  lazy.sml
+  eval.sml
+  interpret.sml
+  check.sml
+  

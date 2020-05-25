@@ -1,0 +1,156 @@
+CS221 Spring 2020: Project 4
+
+Welcome to SULC! SULC is the untyped lambda calculus supplemented with
+a few conveniences. SULC stands for Sugary Untyped Lambda Calculus. At
+the time of this writing (Monday May 25), we have not yet covered
+everything we'll need to cover in order for you to do this project,
+but I will be making new items as soon as I can produce them to
+address the gaps.
+
+The untyped lambda calculus is presented in detail in chapter 5 of
+TaPL, which you should read closely as you work on this assignment. By
+working through this project, you will become familiar with the
+untyped lambda calculus and its various evaluation systems, as well as
+Church numerals and Church pairs.
+
+The concrete syntax of SULC is as follows:
+
+p ::= _x <- t p // abbreviations
+    | t         // terms
+
+t ::= x      // variables
+    | (^x.t) // abstractions (functions)
+    | (t t)  // applications
+    | n      // natural numbers
+    | A      // identity functions
+    | [t t]  // pairs
+    | t.1    // pair first
+    | t.2    // pair second
+    
+Note the single quote character ^ stands in for lowercase lambda. This
+character has been chosen because it looks just a bit like a lambda
+and is easy to type.
+
+There are several distinct syntactic classes for identifiers in
+SULC. Abbreviation names consist of an underscore followed by one or
+more lowercase letters; variable names (those bound in abstractions)
+are one or more lowercase letters; identity-function-abbreviations are
+one or more uppercase letters. The syntactic distinction between the
+three kinds of names is not strictly necessary, but helps give the
+code some syntactically obvious structure. Natural numbers are written
+as blocks of one or more digits, as usual.
+
+Abbreviations and identity-function-abbreviations are both part of
+SULC to make the programs less unreadable. Consider the following
+untyped lambda calculus term:
+
+((((^l.(^m.(^n.((l m) n)))) (^t.(^f.t))) (^A.A)) (^B.B))
+
+This term is equivalent to, per chapter 5, what would be written more
+concisely as "test tru a b". (Please note that Pierce uses plain
+variables in some of his examples, such as "a" and "b" here, although
+technically call-by-value evaluation only proceeds when function
+arguments are values, which bare variables are not.)
+
+Here is an equivalent SULC program, with abbreviations:
+
+_tru  <- (^t.(^f.t))
+_test <- (^l.(^m.(^n.((l m) n))))
+
+(((_test _tru) A) B)
+
+This is still perhaps not *easy* to read, but it is (arguably)
+preferable to its completely anonymous counterpart above.
+
+Interpretation of SULC programs proceeds through these phases:
+
+(reading ->) scanning -> parsing -> inlining -> desugaring -> evaluating
+
+The reading phase happens only when you read text from a file;
+otherwise you start with a string of code at the scanning
+phase. Scanning and parsing are completed on your behalf this time;
+you only need to complete the later phases.
+
+The inlining phase consists of expanding all the abbreviations in the
+main term. The phase begins with a program that contains zero or more
+abbreviations at the beginning; at the end of the phase, all
+abbreviations have been expanded away and the program consists of a
+single term. Please note that it is illegal in SULC to use the same
+abbreviation name twice, so you should raise an error during inlining
+if you encounter any abbreviation name more than once. Note that it
+*is* legal for the term on the right hand side of an abbreviation
+definition to refer to one or more preceding abbreviations.
+
+The desugaring phase starts with a SULC program and rewrites it as an
+ULC program, where ULC stands for "untyped lambda calculus." That is,
+after desugaring, all natural numbers have been rewritten into
+Church-numeral form; all identity abbreviations (like A) have been
+rewritten as the abstractions they stand for (like (^A.A)); all pairs
+and selectors have been replaced with their encodings in the untyped
+lambda calculus as given in chapter 5. The type system of SML will
+guide you through all these phases, and make sure your translations
+are correct at least with respect to types.
+
+This week you have four evaluation step relations to implement: a
+call-by-value step relation following the rules presented in Figure
+5-3 of the text, a full-beta-reduction relation, a normal-order
+relation, and a lazy relation. The latter three are all defined in the
+solution to 5.3.6 at the end of the book (with one giant caveat
+identified in the next paragraph).
+
+The rules for full-beta reduction are as follows (these are presented
+in the text in the solution to exercise 5.3.6 except the lambda rule
+is missing!*):
+
+            t1 -> t1'                   t2 -> t2'
+      -------------------          -------------------
+      (t1 t2) -> (t1' t2)          (t1 t2) -> (t1 t2')
+
+            t1 -> t1'
+       -------------------    ----------------------------
+       (^x.t1) -> (^x.t1')    ((^x.t1) t2) -> [x |-> t2] t1
+
+*The missing rule does appear in the online errata for the text, where
+it says "In the full beta-reduction rules, one is missing": see
+https://www.cis.upenn.edu/~bcpierce/tapl/errata.txt.
+
+The value class is not used in the full-beta reduction rules. As such,
+the full-beta system can be summarized as "evaluate whatever you want,
+whenever you want." As you will see, in full beta reduction, certain
+terms can be evaluated in different ways depending on which evaluation
+steps are chosen. (Please note the lack of a single definite result
+complicates testing; nevertheless, you can implement full-beta however
+you want with respect to order.)
+
+The rules for substitution are as follows, given the following
+associated definition of FV (for "free variables"). 
+
+FV(x)             = {x}
+FV(lambda x . t1) = FV(t1) \ {x}
+FV(t1 t2)         = FV(t1) U FV(t2)
+
+Substitution is done already on your behalf for this project, but the
+following definition is presented nevertheless for your understanding.
+
+[x |-> s] x = s   // connotation: the two xs are syntactically identical
+
+[x |-> s] y = y   // connotation: x and y are syntactically distinct
+
+[x |-> s] (t1 t2) = ([x |-> s]t1  [x |->s]t2)
+
+[x |-> s] (lambda x . t1) = lambda x . t1 // connotation: the two xs are syntactically identical
+
+[x |-> s] (lambda y . t1) = // connotation: x and y are syntactically distinct
+
+  if y is in FV(s) : [x |->s] (lambda y' . t1')
+    where y' is a fresh variable name and in t1' y is rewritten to y'
+
+  if y is not in FV(s) : lambda y . [x |-> s] t1
+
+As usual, the occurences of the string "todo" in the SML files provide
+a map of what to do to complete this project. There is also a sample
+SULC program in the sulc-code directory. This project, unlike its
+predecessors, is written to consume files containing code rather than
+just strings of code. Be sure to make use of Interpret.file' as it is
+especially useful for debugging (relative to the various other
+options).

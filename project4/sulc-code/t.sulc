@@ -1,0 +1,8 @@
+_tru  <- (^t.(^f.t))
+_fls  <- (^t.(^f.f))
+_not  <- (^b.((b _fls) _tru))
+_and  <- (^b.(^c.((b c) _fls)))
+_or   <- (^b.(^c.((b _tru) c)))
+_test <- (^b.(^x.(^y.((b x) y))))
+
+(((_test ((_and (_not _tru)) (_not _fls))) A) B)
