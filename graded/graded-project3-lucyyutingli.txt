@@ -1,0 +1,35 @@
+CMSC 22100 Spring 2020: Project 3
+
+This graded file is for the student with the following cnet: lucyyutingli
+
+===== correctness:
+
+desugar xor 10 / 10
+
+eval pair      9 / 9
+eval select1&2 9 / 9
+eval scope     9 / 9
+
+subst 14 / 14
+
+type env lookup 5 / 5
+typeof          14 / 14
+
+===== style:
+
+layout              (* no layout points, but write beautiful code anyway *)
+
+clarity       5 / 5  (* i.e., the code can be read by another programmer without extraordinary effort *)
+
+decomposition 5 / 5  (* the code is well organized, helper functions defined where helpful *)
+
+===== total: 75 / 80
+
+-5 variable identifier scanning: your scanner raises an
+exception in the isValid function in some cases when the
+character is not an identifier.
+it should instead return 'false' to indicate that it's a
+non-identifier character, because then the takeWhile function
+will properly handle that and stop early.
+
+graded by kavon
