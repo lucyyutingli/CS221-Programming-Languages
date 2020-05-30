@@ -1,0 +1,124 @@
+Problem 1:
+
+datatype term
+  = Var of string
+  | Abs of string * term
+  | App of term * term
+
+
+fun isStuck (Var t) = true
+  | isStuck (Abs (str, t)) = false
+  | isStuck (App (t1, t2)) =
+      (case isStuck t1
+        of true => true
+         | false =>
+            (case isStuck t2
+              of true => true
+               | false => false)))
+
+---------------------------------------------
+
+Problem 2:
+
+Both the t1 and t2 step do not check if the other is a value. This could lead to
+many different errors, such as potential infinite loops and improper stepping.
+It's also much more complex to look at both at the same time, rather than one at
+a time when trying to program such an eval rule.
+
+
+---------------------------------------------
+
+Problem 3:
+
+In this problem I use a capital "G" to represent gamma.
+
+Nat Const:
+
+--------------
+G |- c : Nat
+
+Where c is any natural constant
+
+
+() aka unit:
+
+--------------
+G |- u : Unit
+
+Where u is a unit
+
+
+(Pair t t):
+G |- t1: T1    G |- t2: T2
+------------------------------
+G |- (pair t1 t2) : T1 * T2
+
+
+(#1 t):
+G |- t: T1 * T2
+------------------
+G |- (#1 t) : T1
+
+
+(#2 t):
+G |- t: T1 * T2
+------------------
+G |- (#2 t) : T2
+
+Variable binding:
+G (x) = t
+-----------
+G |- x : T
+
+Variables:
+------------
+G |- x: T
+
+---------------------------------------------
+
+Problem 4:
+
+The first unusual thing is that the rules look at the terms in reverse. Instead of looking
+at t1, then t2, then t3, it takes the opposite route of t3, then t2, then t1. Also the
+"base cases" are at the bottom, rather than the top, which infers that the base cases
+are actually considered last. However, despite this, it should not cause any problems
+in practice, other than perhaps taking longer to analyze.
+
+---------------------------------------------
+
+Problem 5:
+a) This is to ensure that both branches will match the return type that is promised.
+A term is bound to it's return type, but of course this still allows other type
+of terms within it. If an if conditional was supposed to return a Bool, there could still
+be integers within t2 and t3 as long as they all return a Bool. This can work with having the if
+conditional wanting to return an integer, as t2 and t3 can still have Bools within them, as long
+as the end result returns an integer. This prevents any chances that the if conditional will return
+something of a type that it's not supposed to, establishing type safety.
+
+b) Yes this is possible. Consider the example:
+
+if true then 1 else false
+
+This would be a stuck term under the type system, as 1 and false are not of the same type (nat vs bool).
+However, if this was not under the type system, this if conditional could be evaluated and would not
+necessarily be stuck.
+
+---------------------------------------------
+
+Problem 6:
+The type soundness of S should hold for S'. This is because omega already has its inferred typing rule,
+which allows it to work with the other things in the term grammar. So in something like (pair term omega), the
+resulting type would be T1 * Inf, which is allowed in this situation.
+
+---------------------------------------------
+
+Problem 7:
+
+and = λ b . λ c . ((b c) fls)
+
+and tru fls
+ = (λ b . λ c . ((b c) λ t. λ f. f) (λ t. λ f. t) (λ t. λ f. f)
+ = (λ c . ((λ t. λ f. t) c) λ t. λ f. f) (λ t. λ f. f)
+ = ((λ t. λ f. t) (λ t. λ f. f)) (λ t. λ f. f)
+ = λ f. (λ t. λ f. f) (λ t. λ f. f)
+ = λ t. λ f. f
