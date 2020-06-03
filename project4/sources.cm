@@ -14,11 +14,11 @@ Group
   structure CBV
   structure FullBeta
   structure NormalOrder
-  structure Lazy	
+  structure Lazy
   structure Eval
   structure Interpret
   structure Check
-  (* structure Tests *)
+  structure Tests
 is
   $/basis.cm
   $/smlnj-lib.cm
@@ -41,4 +41,4 @@ is
   eval.sml
   interpret.sml
   check.sml
-  
+  tests.sml
