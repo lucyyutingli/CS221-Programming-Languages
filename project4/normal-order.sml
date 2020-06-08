@@ -4,8 +4,6 @@ structure NormalOrder : SMALL_STEP = struct
 
   structure U = ULC
 
-  structure U = ULC
-
   fun isNA (U.Var name) = true
     | isNA (U.App (t1, t2)) = true
     | isNA _ = false
@@ -32,19 +30,21 @@ structure NormalOrder : SMALL_STEP = struct
           false
     | isNANF _ = false
 
-  fun step (U.App (t1, t2)) =
-        if isNANF t1 then
-          (case step t2
-              of SOME t2' => SOME (U.App (t1, t2'))
-               | NONE => NONE)
-        else if isNA t1 then
+  fun step (U.App (U.Abs (s, t1), t2)) = SOME (Subst.subst s t2 t1)
+    | step (U.App (t1, t2)) =
+        if isNA t1 then
           (case step t1
               of SOME t1' => SOME (U.App (t1', t2))
-                | NONE => NONE)
-        else
-          (case t1
-            of (U.Abs (s, t1)) => SOME (Subst.subst s t2 (U.Abs (s, t1)))
-             | _ => NONE)
+               | NONE => 
+                    (case step t2
+                        of SOME t2' => SOME (U.App (t1, t2'))
+                        | NONE => NONE))
+        else if isNANF t1 then
+            (case step t2
+                of SOME t2' => SOME (U.App (t1, t2'))
+                 | NONE => NONE)
+        else 
+            NONE
     | step (U.Abs (s, t)) =
         (case step t
             of SOME t' => SOME (U.Abs (s, t'))

@@ -1,0 +1,9 @@
+_tru  <- (^t.(^f.t))
+_fls  <- (^t.(^f.f))
+_pair <- (^f.(^s.(^b.((b f) s))))
+_fst <- (^p.(p _tru))
+_snd <- (^p.(p _fls))
+_test <- (^b.(^x.(^y.((b x) y))))
+_or   <- (^b.(^c.((b _tru) c)))
+
+(((_test ((_or (_fst ((_pair _tru) _fls))) (_snd ((_pair _tru) _fls)))) A) B)

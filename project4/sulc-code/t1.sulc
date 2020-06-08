@@ -1,0 +1,7 @@
+_tru  <- (^t.(^f.t))
+_fls  <- (^t.(^f.f))
+_isz  <- (^m.((m (^x._fls)) _tru))
+_zer  <- (^s.(^z.z))
+_test <- (^b.(^x.(^y.((b x) y))))
+
+(((_test (_isz _zer)) A) B)
