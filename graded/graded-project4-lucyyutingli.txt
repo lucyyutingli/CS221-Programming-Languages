@@ -1,0 +1,31 @@
+CMSC 22100 Spring 2020: Project 4
+
+This graded file is for the student with the following cnet: lucyyutingli
+
+===== correctness:
+
+inline 10 / 10
+
+desugar 8 / 10
+
+CBV 10 / 10
+
+FullBeta 10 / 10
+
+Lazy 10 / 10
+
+NormalOrder 10 /10
+
+===== Style
+
+layout              (* no layout points, but write beautiful code anyway *)
+
+clarity       10 / 10 (* i.e., the code can be read by another programmer without extraordinary effort *)
+
+decomposition 10 / 10  (* the code is well organized, helper functions defined where helpful *)
+
+===== total: 78 / 80
+
+
+
+graded by kavon
