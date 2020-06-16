@@ -1,0 +1,24 @@
+CS221 exam evaluation for lucyyutingli
+
+question 1 (lucyyutingli): 7/8
+comment (Barbanel): Your solution does not properly handle cases where the term is not stuck (because you can still take a step) but will be stuck after evaluation. For example,  ( ( \ b . b  \ b . b)  x ) is not stuck but your solution marks it as stuck.
+
+question 2 (lucyyutingli): 4/8
+comment (Shaw): You haven't quite hit the nail on the head. The problem here is that if you cannot step on both terms, you cannot step on either term.
+
+question 3 (lucyyutingli): 12/14
+comment (Farvardin): Good job! Just missing rule for let expressions.
+
+question 4 (lucyyutingli): 4/8
+comment (Shaw): You have identified the problem, but have not characterized it as the very serious problem that it is. Under this system, both branches are always evaluated for every conditional, which would cause about a 2x (or worse) slowdown in a conditional-rich computation.
+
+question 5 (lucyyutingli): 6/8
+comment (Sekou): For part a, I think you're on the right track but the key idea is that both branches must be the same type to satisfy the preservation theorem (if some term has type tau1 and takes a step, then it still has that type tau1 after taking a step). Thus, if the "if" is type tau1, then it must remain type tau1 after stepping to either branch, thus both branches must have the same type to step to.
+
+question 6 (lucyyutingli): 4/6
+comment (Shaw): We do still have type soundness, but you should address directly that neither progress nor preservation is invalidated by omega's rules.
+
+question 7 (lucyyutingli): 8/8
+comment (Hackworth): Nice work! I highly recommend keeping tru and fls written as such until you need them to make it easier for you to follow/read
+
+total score (lucyyutingli): 45.0/60.0
