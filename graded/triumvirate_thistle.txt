@@ -1,0 +1,8 @@
+group: triumvirate thistle
+members: lucyyutingli, tanderskow, vogelt
+
+evaluated work from the repository of vogelt
+
+comment (Shaw): You have crafted a good summary of this very influential work. Well done!
+
+report score 15/15
